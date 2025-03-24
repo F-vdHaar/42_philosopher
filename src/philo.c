@@ -6,7 +6,7 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 10:31:53 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/24 10:51:58 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/24 14:45:01 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,30 +25,34 @@ static int	handle_special_args(char *arg)
 	if (ft_strncmp(arg, "--debug", 7) == 0)
 	{
 		enable_debug_mode();
-		log_output("Debug mode enabled");
 		return (EXIT_SUCCESS);
 	}
-	write(2, "Invalid argument. Type --help\n", 31);
-	return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char *argv[])
 {
 	t_table	table;
 
-	if (argc == 2)
-		return (handle_special_args(argv[1]));
-	if (argc < 5 || argc > 6)
+	if (argv[1])
+        handle_special_args(argv[1]);
+    if (ft_strncmp(argv[1], "--debug", 7) == 0)
+    {
+        argc--;
+        argv++;
+        log_output(argv[1]);
+    }
+    if (argc < 5 || argc > 6)
 	{
 		write(2, "Error: Invalid number of arguments. Type --help\n", 48);
 		return (EXIT_FAILURE);
 	}
 	if (init_table(&table, argc, argv) == -1)
 	{
-		write(2, "Error: Initialization failed\n", 29);
+		log_error("[main]: Table Initialization failed");
 		return (EXIT_FAILURE);
 	}
-	//start_simulation(&table);
+	start_simulation(&table);
 	free_table(&table);
 	return (EXIT_SUCCESS);
 }

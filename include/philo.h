@@ -6,7 +6,7 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 10:18:59 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/24 10:46:11 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/24 15:41:00 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,30 @@ struct s_table
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	meal_lock;
 	t_philosopher	*philos;
+    pthread_t         monitor_thread; 
 };
 
 extern int	g_debug_mode;
 
-// Table
-void	free_table(t_table *table);
-int	init_table(t_table *table, int argc, char **argv);
+// table
+void    	free_table(t_table *table);
+int         init_table(t_table *table, int argc, char **argv);
+
+// simulation
+void    	start_simulation(t_table *table);
+
+// philosopher
+int         init_philosophers(t_table *table);
+void        *philosopher_routine(void *arg);
+void        start_philosophers(t_table *table);
+
+// monitor
+void	*monitor_routine(void *arg);
 
 
-
+// philo utils
+void        print_status(t_philosopher *philo, char *status);
+long        get_time_ms();
 // gen_utils
 void		log_error(const char *message);
 void		enable_debug_mode(void);
