@@ -6,10 +6,9 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 10:31:53 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/24 14:45:01 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/25 12:21:17 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "philo.h"
 
@@ -19,7 +18,8 @@ static int	handle_special_args(char *arg)
 {
 	if (ft_strncmp(arg, "--help", 6) == 0)
 	{
-		write(1, "Usage: ./philo num_philos time_to_die time_to_eat time_to_sleep [num_meals]\n", 77);
+		write(1, "Usage: ./philo num_philos ", 27);
+		write(1, "t_die time_to_eat time_to_sleep [num_meals]\n", 45);
 		return (EXIT_SUCCESS);
 	}
 	if (ft_strncmp(arg, "--debug", 7) == 0)
@@ -35,14 +35,13 @@ int	main(int argc, char *argv[])
 	t_table	table;
 
 	if (argv[1])
-        handle_special_args(argv[1]);
-    if (ft_strncmp(argv[1], "--debug", 7) == 0)
-    {
-        argc--;
-        argv++;
-        log_output(argv[1]);
-    }
-    if (argc < 5 || argc > 6)
+		handle_special_args(argv[1]);
+	if (ft_strncmp(argv[1], "--debug", 7) == 0)
+	{
+		argc--;
+		argv++;
+	}
+	if (argc < 5 || argc > 6)
 	{
 		write(2, "Error: Invalid number of arguments. Type --help\n", 48);
 		return (EXIT_FAILURE);
@@ -56,5 +55,3 @@ int	main(int argc, char *argv[])
 	free_table(&table);
 	return (EXIT_SUCCESS);
 }
-
-

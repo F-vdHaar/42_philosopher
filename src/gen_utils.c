@@ -6,7 +6,7 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 19:51:18 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/24 19:56:07 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/25 12:26:53 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 int	g_debug_mode = 0;
 
-void log_error(const char *message)
+void	log_error(const char *message)
 {
-	int fd;
-	const char *prefix = "Error: ";
+	int			fd;
+	const char	*prefix = "Error: ";
 
 	write(STDERR_FILENO, prefix, ft_strlen(prefix));
 	write(STDERR_FILENO, message, ft_strlen(message));
@@ -29,7 +29,7 @@ void log_error(const char *message)
 	if (fd == -1)
 	{
 		write(STDERR_FILENO, "Error: Failed to open log file\n", 31);
-		return;
+		return ;
 	}
 	write(fd, prefix, ft_strlen(prefix));
 	write(fd, message, ft_strlen(message));
@@ -37,10 +37,10 @@ void log_error(const char *message)
 	close(fd);
 }
 
-void log_output(const char *message)
+void	log_output(const char *message)
 {
-	int fd;
-	const char *prefix = "[DEBUG] ";
+	int			fd;
+	const char	*prefix = "[DEBUG] ";
 
 	if (g_debug_mode)
 	{
@@ -51,7 +51,7 @@ void log_output(const char *message)
 		if (fd == -1)
 		{
 			write(STDERR_FILENO, "Error: Failed to open log file\n", 31);
-			return;
+			return ;
 		}
 		write(fd, prefix, ft_strlen(prefix));
 		write(fd, message, ft_strlen(message));
@@ -64,4 +64,13 @@ void	enable_debug_mode(void)
 {
 	g_debug_mode = 1;
 	log_output("Debug mode enabled\n");
+}
+
+/* Utility to get current timestamp in milliseconds */
+long	get_time_ms(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }

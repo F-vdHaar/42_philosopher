@@ -6,11 +6,11 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 10:35:12 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/24 19:34:57 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/25 12:20:56 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 static int	alloc_resources(t_table *table)
 {
@@ -47,34 +47,31 @@ static int	init_mutexes(t_table *table)
 int	init_table(t_table *table, int argc, char **argv)
 {
 	if (!table)
-	{
-		log_error("NULL table pointer.");
-		return (-1);
-	}
+		return (log_error("NULL table pointer."), EXIT_FAILURE);
 	table->num_philos = ft_atoi(argv[1]);
-	table->time_to_die = ft_atoi(argv[2]);
+	table->t_die = ft_atoi(argv[2]);
 	table->time_to_eat = ft_atoi(argv[3]);
 	table->time_to_sleep = ft_atoi(argv[4]);
 	table->meals_required = -1;
 	if (argc == 6)
 		table->meals_required = ft_atoi(argv[5]);
 	log_output("Table parameters initialized.");
-    if (g_debug_mode)
-        printf("Table parameters initialized: num_philos=%d, time_to_die=%d, time_to_eat=%d, time_to_sleep=%d, meals_required=%d\n",
-                 table->num_philos, table->time_to_die, table->time_to_eat, table->time_to_sleep, table->meals_required);
-    if (table->num_philos <= 0 || table->time_to_die <= 0 || table->time_to_eat <= 0 || table->time_to_sleep <= 0)
-    {
-        log_error("[init table]: Invalid argument values.");
-        return (EXIT_FAILURE);
-    }
+	if (g_debug_mode)
+	{
+		printf("num_p=%d, t_die=%d, t_eat=%d, t_sleep=%d, meals_r=%d\n",
+			table->num_philos, table->t_die, table->time_to_eat,
+			table->time_to_sleep, table->meals_required);
+	}
+	if (table->num_philos <= 0 || table->t_die <= 0
+		|| table->time_to_eat <= 0 || table->time_to_sleep <= 0)
+		return (log_error("[init table]: Invalid values."), EXIT_FAILURE);
 	if (alloc_resources(table) == -1 || init_mutexes(table) == -1
 		|| init_philosophers(table) == -1)
-		return (EXIT_FAILURE);
-    pthread_mutex_init(&table->monitor_mutex, NULL);
-    pthread_cond_init(&table->monitor_cond, NULL);
-    return (0);
+		return (log_error("[init table]: init/alloc Fail"), EXIT_FAILURE);
+	pthread_mutex_init(&table->monitor_mutex, NULL);
+	pthread_cond_init(&table->monitor_cond, NULL);
+	return (0);
 }
-
 
 void	free_table(t_table *table)
 {
@@ -100,6 +97,5 @@ void	free_table(t_table *table)
 	pthread_mutex_destroy(&table->meal_lock);
 	if (table->philos)
 		free(table->philos);
-
 	log_output("[free_table]: Successfully freed table resources.");
 }
