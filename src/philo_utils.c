@@ -6,7 +6,7 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:44:51 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/25 15:51:26 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/25 19:20:20 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void	wait_retry(t_philosopher *philo, long current_time)
 	long	time_remaining;
 
 	time_remaining = philo->table->t_die - (current_time - philo->last_meal);
-	if (time_remaining > 200)
-		usleep(10000);
+	if (time_remaining > 500)
+		usleep(time_remaining / 2 + 1000);
 	else if (time_remaining > 100)
-		usleep(5000);
+		usleep(time_remaining / 3 + 1000);
 	else
-		usleep(time_remaining / 2 + 10);
+		usleep(time_remaining / 5 + 1000);
 }
 
 int	take_forks(t_philosopher *philo)

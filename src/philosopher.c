@@ -6,7 +6,7 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:29:51 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/25 12:35:37 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/25 19:03:31 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ void	*philos_routine(void *arg)
 	philo = (t_philosopher *)arg;
 	if (!philo || !philo->left_fork || !philo->right_fork)
 		return (log_error("Philosopher is NULL or has invalid forks!"), NULL);
+	current_time = get_time_ms();
+	wait_retry(philo, current_time);
 	while (!philo->table->stop_simulation)
 	{
 		current_time = get_time_ms();
