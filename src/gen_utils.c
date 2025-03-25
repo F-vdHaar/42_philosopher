@@ -6,49 +6,62 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 19:51:18 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/24 10:21:33 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/24 19:56:07 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stdio.h> 
+#include <fcntl.h> 
+#include <unistd.h>
 
 int	g_debug_mode = 0;
 
-void	log_error(const char *message)
+void log_error(const char *message)
 {
-	int	fd;
+	int fd;
+	const char *prefix = "Error: ";
 
-	printf("Error: %s\n", message);
-	fd = open("error_log.txt", O_WRONLY | O_APPEND | O_CREAT, 0644);
+	write(STDERR_FILENO, prefix, ft_strlen(prefix));
+	write(STDERR_FILENO, message, ft_strlen(message));
+	write(STDERR_FILENO, "\n", 1);
+	fd = open(LOG_FILE, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fd == -1)
 	{
-		printf("Error: Failed to open log file\n");
-		return ;
+		write(STDERR_FILENO, "Error: Failed to open log file\n", 31);
+		return;
 	}
-	printf("Error: %s\n", message);
+	write(fd, prefix, ft_strlen(prefix));
+	write(fd, message, ft_strlen(message));
+	write(fd, "\n", 1);
 	close(fd);
 }
 
-void	log_output(const char *message)
+void log_output(const char *message)
 {
-	const char	*debug_prefix;
+	int fd;
+	const char *prefix = "[DEBUG] ";
 
 	if (g_debug_mode)
 	{
-		debug_prefix = "[DEBUG] ";
-		write(STDERR_FILENO, debug_prefix, 8);
-		while (*message)
-		{
-			write(STDERR_FILENO, message, 1);
-			message++;
-		}
+		write(STDERR_FILENO, prefix, ft_strlen(prefix));
+		write(STDERR_FILENO, message, ft_strlen(message));
 		write(STDERR_FILENO, "\n", 1);
+		fd = open(LOG_FILE, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		if (fd == -1)
+		{
+			write(STDERR_FILENO, "Error: Failed to open log file\n", 31);
+			return;
+		}
+		write(fd, prefix, ft_strlen(prefix));
+		write(fd, message, ft_strlen(message));
+		write(fd, "\n", 1);
+		close(fd);
 	}
 }
 
 void	enable_debug_mode(void)
 {
 	g_debug_mode = 1;
-	write(2, "[DEBUG] Debug mode enabled\n", 26);
 	log_output("Debug mode enabled\n");
 }

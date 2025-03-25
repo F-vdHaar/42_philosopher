@@ -6,13 +6,11 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 10:35:12 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/24 15:46:25 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/24 19:34:57 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "philo.h"
-
-
 
 static int	alloc_resources(t_table *table)
 {
@@ -24,7 +22,7 @@ static int	alloc_resources(t_table *table)
 		log_error("Memory allocation failed.");
 		free(table->forks);
 		free(table->philos);
-		return (-1);
+		return (EXIT_FAILURE);
 	}
 	log_output("Memory allocation successful.");
 	return (0);
@@ -62,7 +60,7 @@ int	init_table(t_table *table, int argc, char **argv)
 		table->meals_required = ft_atoi(argv[5]);
 	log_output("Table parameters initialized.");
     if (g_debug_mode)
-        printf(("Table parameters initialized: num_philos=%d, time_to_die=%d, time_to_eat=%d, time_to_sleep=%d, meals_required=%d\n",
+        printf("Table parameters initialized: num_philos=%d, time_to_die=%d, time_to_eat=%d, time_to_sleep=%d, meals_required=%d\n",
                  table->num_philos, table->time_to_die, table->time_to_eat, table->time_to_sleep, table->meals_required);
     if (table->num_philos <= 0 || table->time_to_die <= 0 || table->time_to_eat <= 0 || table->time_to_sleep <= 0)
     {
@@ -72,7 +70,9 @@ int	init_table(t_table *table, int argc, char **argv)
 	if (alloc_resources(table) == -1 || init_mutexes(table) == -1
 		|| init_philosophers(table) == -1)
 		return (EXIT_FAILURE);
-	return (0);
+    pthread_mutex_init(&table->monitor_mutex, NULL);
+    pthread_cond_init(&table->monitor_cond, NULL);
+    return (0);
 }
 
 
