@@ -6,7 +6,7 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:44:51 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/25 19:20:20 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/25 22:43:55 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,36 @@ void	wait_retry(t_philosopher *philo, long current_time)
 	else
 		usleep(time_remaining / 5 + 1000);
 }
-
 int	take_forks(t_philosopher *philo)
 {
-	if (pthread_mutex_lock(philo->left_fork) != 0)
+	pthread_mutex_t *first_fork;
+	pthread_mutex_t *second_fork;
+
+	if (philo->id % 2 == 0)
 	{
-		if (g_debug_mode)
-			print_status(philo, "failed to take left fork");
-		return (-1);
-	}
-	print_status(philo, "has taken a fork");
-	if (pthread_mutex_trylock(philo->right_fork) == 0)
-	{
-		print_status(philo, "has taken second fork");
-		return (1);
+		first_fork = philo->right_fork;
+		second_fork = philo->left_fork;
 	}
 	else
 	{
-		print_status(philo, "failed take second fork, releasing fork");
-		pthread_mutex_unlock(philo->left_fork);
+		first_fork = philo->left_fork;
+		second_fork = philo->right_fork;
+	}
+	if (pthread_mutex_lock(first_fork) != 0)
+	{
+		if (g_debug_mode)
+			print_status(philo, "failed to take first fork");
+		return (-1);
+	}
+	print_status(philo, "has taken the first fork");
+	if (pthread_mutex_lock(second_fork) != 0)
+	{
+		print_status(philo, "failed to take second fork, releasing first fork");
+		pthread_mutex_unlock(first_fork);
 		return (0);
 	}
+	print_status(philo, "has taken the second fork");
+	return (1);
 }
 
 // Helper: Release both forks
