@@ -6,7 +6,7 @@
 #    By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 20:24:03 by fvon-de           #+#    #+#              #
-#    Updated: 2025/03/25 15:48:06 by fvon-de          ###   ########.fr        #
+#    Updated: 2025/03/25 17:52:35 by fvon-de          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ OBJ_DIR         = obj
 # Compiler settings
 CC              = cc
 CFLAGS          = -Wall -Wextra -Werror -Wunused -I$(INCLUDE_DIR)
-DEBUG_FLAGS     = -g -I$(INCLUDE_DIR)
+DEBUG_FLAGS     = -g -O0 -fsanitize=thread -I$(INCLUDE_DIR)
 
 # Source and object files
 SRC_DIR = src

@@ -6,7 +6,7 @@
 /*   By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 10:31:53 by fvon-de           #+#    #+#             */
-/*   Updated: 2025/03/25 12:21:17 by fvon-de          ###   ########.fr       */
+/*   Updated: 2025/03/25 17:56:56 by fvon-de          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	if (init_table(&table, argc, argv) == -1)
-	{
-		log_error("[main]: Table Initialization failed");
-		return (EXIT_FAILURE);
-	}
+		return (log_error("[main]: Table Initialization failed"), EXIT_FAILURE);
 	start_simulation(&table);
 	free_table(&table);
 	return (EXIT_SUCCESS);
