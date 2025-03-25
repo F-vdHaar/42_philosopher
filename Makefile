@@ -6,7 +6,7 @@
 #    By: fvon-de <fvon-der@student.42heilbronn.d    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 20:24:03 by fvon-de           #+#    #+#              #
-#    Updated: 2025/03/24 10:15:30 by fvon-de          ###   ########.fr        #
+#    Updated: 2025/03/25 15:48:06 by fvon-de          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,10 +27,22 @@ OBJ_DIR         = obj
 # Compiler settings
 CC              = cc
 CFLAGS          = -Wall -Wextra -Werror -Wunused -I$(INCLUDE_DIR)
-DEBUG_FLAGS     = -I$(INCLUDE_DIR) \
+DEBUG_FLAGS     = -g -I$(INCLUDE_DIR)
 
 # Source and object files
-SRCS = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
+SRC_DIR = src
+
+SRCS = $(SRC_DIR)/ft_atoi.c \
+       $(SRC_DIR)/ft_strlen.c \
+       $(SRC_DIR)/ft_strncmp.c \
+       $(SRC_DIR)/gen_utils.c \
+       $(SRC_DIR)/monitor.c \
+       $(SRC_DIR)/philo.c \
+       $(SRC_DIR)/philosopher.c \
+       $(SRC_DIR)/philo_utils.c \
+       $(SRC_DIR)/simulation.c \
+       $(SRC_DIR)/table.c
+
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # For Debug
 $(info Sources: $(SRCS))
